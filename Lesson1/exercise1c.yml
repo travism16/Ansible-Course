@@ -1,0 +1,7 @@
+---
+rtr1: 
+  host: rtr1.example.com
+  username: bob
+  password: SolarWinds123
+  device_type: cisco
+  use_session_log: True

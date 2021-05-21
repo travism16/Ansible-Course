@@ -1,0 +1,25 @@
+---
+
+- name: Exercise 3a
+  connection: ansible.netcommon.network_cli
+  gather_facts: False
+  hosts: localhost
+  tasks:
+
+    - name: Builtin Debug stdout
+      ansible.builtin.debug:
+        var: ansible_host
+
+- name: Exercise 3c
+  connection: ansible.netcommon.network_cli
+  gather_facts: False
+  hosts: cisco
+  tasks:
+
+    - name: Connection
+      ansible.builtin.debug:
+        var: ansible_connection
+
+    - name: Host
+      ansible.builtin.debug:
+        var: ansible_host
