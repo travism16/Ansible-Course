@@ -1,0 +1,27 @@
+---
+- name: Exercise1
+  hosts: arista5
+  gather_facts: True
+  vars_files: my_vars.yml
+  tasks:
+  - name: Exercise1a - Print ansible_facts
+    debug:
+      msg: "{{ ansible_facts }}"
+  - name: Exercise 1a - Print ansible_facts.net_all_ipv4_addresses
+    debug:
+      msg: "{{ ansible_facts.net_all_ipv4_addresses }}"
+  - name: Exercise 1b - ansible_network_os
+    debug:
+      msg: "{{ ansible_network_os }}"
+  - name: Exercise 1b - ansible_host
+    debug:
+      msg: "{{ ansible_host }}"
+  - name: Exercise 1c - desired_eos_version with group vars
+    debug:
+      msg: "{{ desired_eos_version }}"
+  - name: Exercise 1e - set_fact 
+    set_fact:
+      device_hostname: "{{ inventory_hostname }}.lab.io"
+  - name: Exercise 1e - print hostname
+    debug:
+      msg: "{{ device_hostname }}"

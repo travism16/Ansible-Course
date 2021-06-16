@@ -1,0 +1,18 @@
+---
+- name: Exercise 5
+  hosts: juniper
+  gather_facts: False
+  tasks:
+
+    - name: show interfaces terse
+      junipernetworks.junos.junos_command:
+        commands: show interfaces terse
+      register: interfaces
+
+    - name: Gather fxp0.0 line
+      ansible.builtin.set_fact:
+        fxp0_var: "{{ interfaces['stdout_lines'][0][21] }}"
+
+    - name: Display IP address
+      ansible.builtin.debug:
+        msg: "Primary IP: {{ fxp0_var.split()[-1] }}"

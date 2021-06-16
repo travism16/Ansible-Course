@@ -1,0 +1,17 @@
+---
+- name: Exercise 6
+  hosts: cisco6
+  gather_facts: False
+  tasks:
+
+    - name: Clear logging on cisco6
+      cisco.ios.ios_command:
+        commands:
+        - command: clear logging
+          prompt: confirm
+          answer: y
+      register: output
+
+    - name: Print output of clear logging
+      ansible.builtin.debug:
+        var: output  
