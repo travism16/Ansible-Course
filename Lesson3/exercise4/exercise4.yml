@@ -1,0 +1,13 @@
+---
+- name: Exercise 4
+  hosts: arista
+  gather_facts: False
+  vars:
+    hostname: "{{ inventory_hostname }}"
+
+  tasks:
+
+    - name: Use Jinja2 template and create config file
+      ansible.builtin.template:
+        src: arista.j2
+        dest: "./CFGS/{{ inventory_hostname }}.txt"

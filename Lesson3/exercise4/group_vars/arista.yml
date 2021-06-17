@@ -1,0 +1,16 @@
+def_gateway: 10.220.88.1
+arista_interfaces:
+  Ethernet1:
+    vlan_id: 1
+  Ethernet2:
+    vlan_id: 2
+  Ethernet3:
+    vlan_id: 3
+  Ethernet4:
+    vlan_id: 4
+  Ethernet5:
+    vlan_id: 5
+  Ethernet6:
+    vlan_id: 6
+  Ethernet7:
+    vlan_id: 7

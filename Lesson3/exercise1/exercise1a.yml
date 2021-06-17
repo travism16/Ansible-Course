@@ -1,0 +1,31 @@
+---
+- name: Exercise 1a
+  hosts: arista,cisco,juniper
+  gather_facts: False
+
+  tasks:
+
+    - name: Detect if EOS device and run "sh ip arp" 
+      arista.eos.eos_command:
+        commands:
+          - show ip arp
+      register: show_ip_arp_eos
+      when: ansible_network_os == "eos"
+
+    - name: Detect if IOS device and run "sh arp"
+      cisco.ios.ios_command:
+        commands:
+          - show arp
+      register: show_arp_ios
+      when: ansible_network_os == "ios"
+
+    - name: Detect if JunOS device and run "sh arp"
+      junipernetworks.junos.junos_command:
+        commands:
+          - show arp
+      register: show_arp_junos
+      when: ansible_network_os == "junos"
+
+    - ansible.builtin.debug:
+        var: show_ip_arp_eos
+      when: ansible_network_os == "eos"

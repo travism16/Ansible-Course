@@ -1,0 +1,32 @@
+---
+- name: Exercise 5
+  hosts: nxos
+  gather_facts: False
+  tasks:
+
+    - name: Check if host CFGS directories exist
+      ansible.builtin.stat:
+        path: "./CFGS/fragments/{{ inventory_hostname }}"
+      register: stat_result
+
+    - name: Create host CFGS directory if it doesn't exist
+      ansible.builtin.file:
+        path: "./CFGS/fragments/{{ inventory_hostname }}"
+        state: directory
+        mode: "0755"
+      when: stat_result.stat.exists == False
+
+    - name: Create interfaces template
+      ansible.builtin.template:
+        src: interfaces.j2
+        dest: "./CFGS/fragments/{{ inventory_hostname }}/01-{{ inventory_hostname }}_interfaces.txt"
+
+    - name: Create BGP template
+      ansible.builtin.template:
+        src: bgp.j2
+        dest: "./CFGS/fragments/{{ inventory_hostname }}/02-{{ inventory_hostname }}_bgp.txt"
+
+    - name: Combine fragments of config files
+      ansible.builtin.assemble:
+        src: "./CFGS/fragments/{{ inventory_hostname }}/"
+        dest: "./CFGS/{{ inventory_hostname }}.txt"
