@@ -1,0 +1,3 @@
+---
+intf_name: "Ethernet1/3"
+intf_native_vlan: "4"

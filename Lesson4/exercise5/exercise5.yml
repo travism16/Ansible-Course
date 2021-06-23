@@ -1,0 +1,46 @@
+---
+- name: Exercise 5
+  hosts: nxos
+  gather_facts: False
+  tasks:
+
+    - name: Configure interface as switchport
+      cisco.nxos.nxos_interfaces:
+        config:
+          - name: "{{ intf_name }}"
+            enabled: true
+            mode: layer2
+        state: merged
+
+    - name: Configure interface to trunk
+      cisco.nxos.nxos_l2_interface:
+        name: "{{ intf_name }}"
+        mode: trunk
+
+    - name: Set trunk native vlan
+      cisco.nxos.nxos_l2_interfaces:
+        config:
+          - name: "{{ intf_name }}"
+            trunk:
+              native_vlan: "{{ intf_native_vlan }}"
+
+    - name: Gather data with 'show interface {{ intf_name }} trunk | json'
+      cisco.nxos.nxos_command:
+        commands:
+          - "show interface {{ intf_name }} trunk | json"
+      register: output
+      tags: verify
+
+    - name: Gather data from interface table
+      ansible.builtin.set_fact:
+        intf_table_data: "{{ output.stdout[0].TABLE_interface['ROW_interface'] }}"
+      tags: verify
+
+    - name: Verify that interface is trunking and native vlan is set
+      ansible.builtin.assert:
+        that:
+          - "intf_table_data.interface == '{{ intf_name }}'"
+          - "intf_table_data.native == '{{ intf_native_vlan }}'"
+        fail_msg: "{{ intf_name }} is not trunking or does not have correct native vlan"
+        success_msg: "{{ intf_name }} is trunking with correct native vlan"
+      tags: verify

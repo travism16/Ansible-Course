@@ -1,0 +1,3 @@
+---
+domain_name_var: bogus.com
+name_servers_var: ['8.8.8.8', '8.8.4.4']

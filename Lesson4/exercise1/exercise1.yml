@@ -1,0 +1,20 @@
+---
+- name: Exercise 1
+  hosts: cisco
+  gather_facts: False
+  tasks:
+    - name: Enter custom banner
+      cisco.ios.ios_banner:
+        banner: login
+        text: |
+          ********************************
+          CISCO LOGIN BANNER
+          ********************************
+        state: present
+      notify: write mem
+
+  handlers:
+    - name: write mem
+      cisco.ios.ios_command:
+        commands: wr mem
+      changed_when: True

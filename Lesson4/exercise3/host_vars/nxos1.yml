@@ -1,0 +1,5 @@
+---
+intf_name: Ethernet1/4
+intf_ip_addr: 10.227.220.1
+intf_netmask: 24
+nxos_neighbor: 10.227.220.2

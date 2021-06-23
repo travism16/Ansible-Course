@@ -1,0 +1,4 @@
+---
+vlan_id: "212"
+vlan_name: BEST_VLAN
+intf_id: "Ethernet5"

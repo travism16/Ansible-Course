@@ -1,0 +1,39 @@
+---
+- name: Exercise 4
+  hosts: arista
+  gather_facts: False
+  tasks:
+    - name: Create VLAN on Arista devices
+      arista.eos.eos_vlans:
+        config:
+          - vlan_id: "{{ vlan_id }}"
+            name: "{{ vlan_name }}"
+        state: merged
+
+    - name: Assign VLAN to interface
+      arista.eos.eos_l2_interfaces:
+        config:
+          - name: "{{ intf_id }}"
+            mode: access
+            access:
+              vlan: "{{ vlan_id }}"
+        state: merged
+
+    - name: Gather data from "show vlan | json"
+      arista.eos.eos_command:
+        commands: "show vlan | json"
+      register: show_vlan
+      tags: verify
+
+    - name: Get created VLAN interfaces
+      ansible.builtin.set_fact:
+        show_vlan_interfaces: "{{ show_vlan.stdout[0].vlans[vlan_id].interfaces }}"
+      tags: verify
+
+    - name: Verify VLAN was added to interface
+      ansible.builtin.assert:
+        that:
+          - "'{{ intf_id }}' in show_vlan_interfaces"
+        fail_msg: "VLAN '{{ vlan_id }}' was not added to '{{intf_id }}'"
+        success_msg: "VLAN '{{ vlan_id }}' was succesfully added to '{{ intf_id }}'"
+      tags: verify
