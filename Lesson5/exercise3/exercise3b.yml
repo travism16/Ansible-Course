@@ -1,0 +1,34 @@
+---
+- name: Exercise 3b
+  hosts: cisco5:cisco6
+  gather_facts: False
+  tasks:
+
+    - name: Create access list
+      cisco.ios.ios_config:
+        lines:
+          - deny ip host 10.1.1.10 any
+          - permit ip host 10.1.1.1 any
+          - permit ip host 10.1.1.2 any
+          - permit ip host 10.1.1.3 any
+          - permit ip host 10.1.1.4 any
+          - permit ip host 10.1.1.5 any
+          - permit ip host 10.1.1.6 any
+          - permit ip host 10.1.1.7 any
+          - permit ip host 10.1.1.8 any
+          - permit ip host 10.1.1.9 any
+        before: no ip access-list extended TEST-ANSIBLE1
+        parents: ip access-list extended TEST-ANSIBLE1
+        match: exact
+        replace: block
+
+    - name: Verify access-list
+      cisco.ios.ios_command:
+        commands: show access-list TEST-ANSIBLE1
+      register: output
+      tags: verify
+
+    - name: Output from previous task
+      ansible.builtin.debug:
+        var: output.stdout_lines[0]
+      tags: verify

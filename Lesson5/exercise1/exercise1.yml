@@ -1,0 +1,60 @@
+---
+- name: Exercise 1
+  hosts: cisco:nxos:arista:juniper
+  gather_facts: True
+  tasks:
+
+    - name: Configure Cisco IOS devices
+      cisco.ios.ios_config:
+        lines:
+          - "ntp server {{ ntp_server1 }}"
+          - "ntp server {{ ntp_server2 }}"
+          - "ip domain name {{ domain_name }}"
+          - "ip name-server {{ dns_server1 }}"
+          - "ip name-server {{ dns_server2 }}"
+        save_when: changed
+      when: ansible_facts.net_iostype is defined and
+            ansible_facts.net_iostype == "IOS"
+
+    - name: Configure Cisco IOS-XE devices
+      cisco.ios.ios_config:
+        lines:
+          - "ntp server {{ ntp_server1 }}"
+          - "ntp server {{ ntp_server2 }}"
+          - "ip domain name {{ domain_name }}"
+          - "ip name-server {{ dns_server1 }} {{ dns_server2 }}"
+        save_when: changed
+      when: ansible_facts.net_iostype is defined and
+            ansible_facts.net_iostype == "IOS-XE"
+
+    - name: Configure NXOS devices
+      cisco.nxos.nxos_config:
+        lines:
+          - "ntp server {{ ntp_server1 }} use-vrf management"
+          - "ntp server {{ ntp_server2 }} use-vrf default"
+          - "ip domain-name {{ domain_name }}"
+          - "ip name-server {{ dns_server1 }} {{ dns_server2 }}"
+        save_when: changed
+      when: 'ansible_network_os == "nxos"'
+
+    - name: Configure Arista devices
+      arista.eos.eos_config:
+        lines:
+          - "ntp server {{ ntp_server1 }}"
+          - "ntp server {{ ntp_server2 }}"
+          - "ip domain-name {{ domain_name }}"
+          - "ip name-server {{ dns_server1 }}"
+          - "ip name-server {{ dns_server2 }}"
+        save_when: changed
+      when: 'ansible_network_os == "eos"'
+
+    - name: Configure Juniper devices
+      junipernetworks.junos.junos_config:
+        lines:
+          - "set system name-server {{ dns_server1 }}"
+          - "set system name-server {{ dns_server2 }}"
+          - "set system domain-name {{ domain_name }}"
+          - "set system ntp server {{ ntp_server1 }}"
+          - "set system ntp server {{ ntp_server2 }}"
+      when: 'ansible_network_os == "junos"'
+      tags: junos

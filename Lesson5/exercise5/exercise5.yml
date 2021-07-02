@@ -1,0 +1,19 @@
+---
+- name: Exercise 5
+  hosts: cisco1:cisco2
+  gather_facts: False
+  tasks:
+
+    - name: Gather 'show users'
+      cisco.ios.ios_command:
+        commands: show users
+      register: output
+
+    - name: Display 'show users'
+      ansible.builtin.debug:
+        var: output.stdout[0]
+
+    - name: Verify that user is student1
+      ansible.builtin.assert:
+        that:
+          - "'student1' in output.stdout[0]"

@@ -1,0 +1,18 @@
+---
+- name: Exercise 4
+  hosts: nxos1:nxos2
+  gather_facts: False
+  tasks:
+
+    - name: Use config file to configure NXOS devices
+      cisco.nxos.nxos_config:
+        src: "~/Ansible_Course/Lesson3/exercise5/CFGS/{{ inventory_hostname }}.txt"
+
+    - name: Gather "show ip bgp summary" from devices
+      cisco.nxos.nxos_command:
+        commands: show ip bgp summary
+      register: output
+
+    - name: Display results from "show ip bgp summary"
+      ansible.builtin.debug:
+        var: output.stdout_lines[0]
