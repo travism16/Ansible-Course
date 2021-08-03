@@ -1,0 +1,9 @@
+---
+- name: Exercise 1b
+  hosts: localhost
+  gather_facts: False
+  vars:
+    file: subtasks1.yml
+  tasks:
+    - name: Loop over four IP addresses
+      ansible.builtin.import_tasks: "{{ file }}"

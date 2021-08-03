@@ -1,0 +1,12 @@
+---
+- name: Exercise 3
+  hosts: cisco
+  gather_facts: True
+  tasks:
+    - name: Cisco IOS devices
+      ansible.builtin.import_tasks: ios.yml
+      when: ansible_facts.net_iostype == "IOS"
+
+    - name: Cisco IOS-XE devices
+      ansible.builtin.import_tasks: iosxe.yml
+      when: ansible_facts.net_iostype == "IOS-XE"

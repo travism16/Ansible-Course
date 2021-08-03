@@ -1,0 +1,4 @@
+---
+- name: Configure VRFs
+  cisco.ios.ios_config:
+    src: vrf.j2

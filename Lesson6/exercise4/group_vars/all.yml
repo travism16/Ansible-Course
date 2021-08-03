@@ -1,0 +1,6 @@
+---
+ntp_server1: 45.33.84.208
+ntp_server2: 152.2.21.1
+domain_name: example.com
+dns_server1: 8.8.8.8
+dns_server2: 1.1.1.1

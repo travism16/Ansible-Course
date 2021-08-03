@@ -1,0 +1,8 @@
+---
+- name: Exercise 1c
+  hosts: localhost
+  gather_facts: False
+  tasks:
+    - name: Include subtasks2.yml
+      ansible.builtin.import_tasks: subtasks2.yml
+#      tags: always

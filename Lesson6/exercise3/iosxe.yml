@@ -1,0 +1,7 @@
+---
+- name: Configure IOS-XE device with DNS, NTP and Domain Name
+  cisco.ios.ios_config:
+    lines:
+      - ip domain name example.com
+      - ntp server 45.33.84.208
+      - ip name-server 8.8.8.8 8.8.4.4

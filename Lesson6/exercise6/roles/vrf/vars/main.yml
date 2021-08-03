@@ -1,0 +1,7 @@
+---
+vrf_name1: blue
+vrf_name2: red
+vrf_rd1: "65000:1"
+vrf_rd2: "65000:2"
+vrf_interface1: Loopback98
+vrf_interface2: Loopback99

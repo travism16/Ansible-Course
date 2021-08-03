@@ -1,0 +1,5 @@
+---
+- name: Exercise 5
+  hosts: arista:cisco:nxos
+  roles:
+    - ntp
