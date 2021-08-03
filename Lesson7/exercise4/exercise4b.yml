@@ -1,0 +1,22 @@
+---
+- name: Exercise 4b
+  hosts: nxos
+  gather_facts: False
+  collections:
+    - clay584.genie
+  vars:
+    command: show version
+  tasks:
+
+    - name: Execute 'show version' command
+      cisco.nxos.nxos_command:
+        commands: "{{ command }}"
+      register: output
+
+    - name: Parse output
+      ansible.builtin.set_fact:
+        output_parsed: "{{ output.stdout[0] | clay584.genie.parse_genie(command=command, os='nxos') }}"
+
+    - name: Display system software version from parsed output
+      ansible.builtin.debug:
+        msg: "System software version is {{ output_parsed['platform']['software']['system_version'] }}"

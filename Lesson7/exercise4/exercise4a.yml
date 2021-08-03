@@ -1,0 +1,22 @@
+---
+- name: Exercise 4a
+  hosts: nxos
+  gather_facts: False
+  collections:
+    - clay584.genie
+  vars:
+    command: show interface
+  tasks:
+
+    - name: Execute 'show interface' command
+      cisco.nxos.nxos_command:
+        commands: "{{ command }}"
+      register: output
+
+    - name: Parse output
+      ansible.builtin.set_fact:
+        output_parsed: "{{ output.stdout[0] | clay584.genie.parse_genie(command=command, os='nxos') }}"
+
+    - name: Display parsed output
+      ansible.builtin.debug:
+        var: output_parsed

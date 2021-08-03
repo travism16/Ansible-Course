@@ -1,0 +1,26 @@
+---
+- name: Exercise 5a
+  hosts: nxos
+  gather_facts: False
+  tasks:
+
+    - name: Execute 'show lldp neighbors'
+      cisco.nxos.nxos_command:
+        commands: show lldp neighbors
+      register: output
+
+    - name: Extract relevant output information
+      ansible.builtin.set_fact:
+        output: "{{ output.stdout[0] }}"
+
+    - name: Show output of extracted info
+      ansible.builtin.debug:
+        var: output.splitlines()
+
+    - name: Extract only LLDP neighbours from output
+      ansible.builtin.set_fact:
+        lldp_neighbors: "{{ output | regex_findall('^(\\S+)\\s+(Eth\\S+)\\s+\\S+\\s+\\S+\\s+(Ethernet\\S+)', multiline=True) }}"
+
+    - name: Show extracted LLDP Neighbors
+      ansible.builtin.debug:
+        msg: "{{ lldp_neighbors }}"

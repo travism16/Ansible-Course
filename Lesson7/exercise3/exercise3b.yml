@@ -1,0 +1,22 @@
+---
+- name: Exercise 3b
+  hosts: arista
+  gather_facts: False
+  vars:
+    platform: "arista_eos"
+    command: "show vlan"
+    textfsm_index: "/home/travismauthe/ntc-templates/ntc_templates/templates/"
+  tasks:
+
+    - name: Execute 'show vlan' command
+      arista.eos.eos_command:
+        commands: "{{ command }}"
+      register: output
+
+    - name: Parse output
+      ansible.builtin.set_fact:
+        parsed_output: "{{ output.stdout[0] | ntc_parse(command, platform, textfsm_index) }}"
+
+    - name: Display structured data
+      ansible.builtin.debug:
+        var: parsed_output

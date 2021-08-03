@@ -1,0 +1,24 @@
+---
+- name: Exercise2
+  hosts: arista5
+  gather_facts: False
+  tasks:
+    - block:
+        - name: Attempt config with invalid password
+          vars:
+            ansible_ssh_pass: "invalid"
+          arista.eos.eos_config:
+            lines:
+              - "ip name-server 1.1.1.1"
+              - "ip name-server 8.8.8.8"
+
+      rescue:
+        - name: Try configuration again in rescue-block
+          vars:
+            # Use environment variable instead of hard coded password
+            ansible_ssh_pass: "{{ lookup('env', 'ANSIBLE_PASSWORD') }}"
+          arista.eos.eos_config:
+            lines:
+              - "ip name-server 1.1.1.1"
+              - "ip name-server 8.8.8.8"
+
